@@ -1,2 +1,2 @@
 # Drivers-AVR-ATMega32
-Drivers for Atmega 32
+A repository for C drivers builtfor Atmega32 AVR Micro-controller with layered Architecture applied.
