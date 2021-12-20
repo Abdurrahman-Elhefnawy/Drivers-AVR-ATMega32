@@ -1,0 +1,209 @@
+
+External_Interrupt.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000152  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         000003cc  00000000  00000000  000001a8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      000006e4  00000000  00000000  00000574  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 36 00 	jmp	0x6c	; 0x6c <__vector_1>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 5a 00 	call	0xb4	; 0xb4 <main>
+  64:	0c 94 a7 00 	jmp	0x14e	; 0x14e <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <__vector_1>:
+#include"bit_math.h"
+
+void INT0_init();
+
+ISR(INT0_vect)
+{
+  6c:	1f 92       	push	r1
+  6e:	0f 92       	push	r0
+  70:	0f b6       	in	r0, 0x3f	; 63
+  72:	0f 92       	push	r0
+  74:	11 24       	eor	r1, r1
+  76:	8f 93       	push	r24
+  78:	9f 93       	push	r25
+  7a:	af 93       	push	r26
+  7c:	bf 93       	push	r27
+  7e:	ef 93       	push	r30
+  80:	ff 93       	push	r31
+  82:	df 93       	push	r29
+  84:	cf 93       	push	r28
+  86:	cd b7       	in	r28, 0x3d	; 61
+  88:	de b7       	in	r29, 0x3e	; 62
+	TOGGLE_BIT(DDRB_REG,0);
+  8a:	a7 e3       	ldi	r26, 0x37	; 55
+  8c:	b0 e0       	ldi	r27, 0x00	; 0
+  8e:	e7 e3       	ldi	r30, 0x37	; 55
+  90:	f0 e0       	ldi	r31, 0x00	; 0
+  92:	90 81       	ld	r25, Z
+  94:	81 e0       	ldi	r24, 0x01	; 1
+  96:	89 27       	eor	r24, r25
+  98:	8c 93       	st	X, r24
+}
+  9a:	cf 91       	pop	r28
+  9c:	df 91       	pop	r29
+  9e:	ff 91       	pop	r31
+  a0:	ef 91       	pop	r30
+  a2:	bf 91       	pop	r27
+  a4:	af 91       	pop	r26
+  a6:	9f 91       	pop	r25
+  a8:	8f 91       	pop	r24
+  aa:	0f 90       	pop	r0
+  ac:	0f be       	out	0x3f, r0	; 63
+  ae:	0f 90       	pop	r0
+  b0:	1f 90       	pop	r1
+  b2:	18 95       	reti
+
+000000b4 <main>:
+
+int main()
+{
+  b4:	df 93       	push	r29
+  b6:	cf 93       	push	r28
+  b8:	cd b7       	in	r28, 0x3d	; 61
+  ba:	de b7       	in	r29, 0x3e	; 62
+	INT0_init();
+  bc:	0e 94 6f 00 	call	0xde	; 0xde <INT0_init>
+
+	/*set PB0 as output and clear it*/
+	SET_BIT(DDRB_REG,0);
+  c0:	a7 e3       	ldi	r26, 0x37	; 55
+  c2:	b0 e0       	ldi	r27, 0x00	; 0
+  c4:	e7 e3       	ldi	r30, 0x37	; 55
+  c6:	f0 e0       	ldi	r31, 0x00	; 0
+  c8:	80 81       	ld	r24, Z
+  ca:	81 60       	ori	r24, 0x01	; 1
+  cc:	8c 93       	st	X, r24
+	SET_BIT(PORTB_REG,0);
+  ce:	a8 e3       	ldi	r26, 0x38	; 56
+  d0:	b0 e0       	ldi	r27, 0x00	; 0
+  d2:	e8 e3       	ldi	r30, 0x38	; 56
+  d4:	f0 e0       	ldi	r31, 0x00	; 0
+  d6:	80 81       	ld	r24, Z
+  d8:	81 60       	ori	r24, 0x01	; 1
+  da:	8c 93       	st	X, r24
+  dc:	ff cf       	rjmp	.-2      	; 0xdc <main+0x28>
+
+000000de <INT0_init>:
+	return 0;
+}
+
+
+void INT0_init()
+{
+  de:	df 93       	push	r29
+  e0:	cf 93       	push	r28
+  e2:	cd b7       	in	r28, 0x3d	; 61
+  e4:	de b7       	in	r29, 0x3e	; 62
+	CLR_BIT(STATUS_REG,7);
+  e6:	af e5       	ldi	r26, 0x5F	; 95
+  e8:	b0 e0       	ldi	r27, 0x00	; 0
+  ea:	ef e5       	ldi	r30, 0x5F	; 95
+  ec:	f0 e0       	ldi	r31, 0x00	; 0
+  ee:	80 81       	ld	r24, Z
+  f0:	8f 77       	andi	r24, 0x7F	; 127
+  f2:	8c 93       	st	X, r24
+
+	CLR_BIT(DDRA_REG,0);
+  f4:	aa e3       	ldi	r26, 0x3A	; 58
+  f6:	b0 e0       	ldi	r27, 0x00	; 0
+  f8:	ea e3       	ldi	r30, 0x3A	; 58
+  fa:	f0 e0       	ldi	r31, 0x00	; 0
+  fc:	80 81       	ld	r24, Z
+  fe:	8e 7f       	andi	r24, 0xFE	; 254
+ 100:	8c 93       	st	X, r24
+	SET_BIT(PORTA_REG,0);
+ 102:	ab e3       	ldi	r26, 0x3B	; 59
+ 104:	b0 e0       	ldi	r27, 0x00	; 0
+ 106:	eb e3       	ldi	r30, 0x3B	; 59
+ 108:	f0 e0       	ldi	r31, 0x00	; 0
+ 10a:	80 81       	ld	r24, Z
+ 10c:	81 60       	ori	r24, 0x01	; 1
+ 10e:	8c 93       	st	X, r24
+
+	SET_BIT(GICR_REG,6);
+ 110:	ab e5       	ldi	r26, 0x5B	; 91
+ 112:	b0 e0       	ldi	r27, 0x00	; 0
+ 114:	eb e5       	ldi	r30, 0x5B	; 91
+ 116:	f0 e0       	ldi	r31, 0x00	; 0
+ 118:	80 81       	ld	r24, Z
+ 11a:	80 64       	ori	r24, 0x40	; 64
+ 11c:	8c 93       	st	X, r24
+
+	SET_BIT(MCUCR_REG,1);
+ 11e:	a5 e5       	ldi	r26, 0x55	; 85
+ 120:	b0 e0       	ldi	r27, 0x00	; 0
+ 122:	e5 e5       	ldi	r30, 0x55	; 85
+ 124:	f0 e0       	ldi	r31, 0x00	; 0
+ 126:	80 81       	ld	r24, Z
+ 128:	82 60       	ori	r24, 0x02	; 2
+ 12a:	8c 93       	st	X, r24
+	SET_BIT(MCUCR_REG,0);
+ 12c:	a5 e5       	ldi	r26, 0x55	; 85
+ 12e:	b0 e0       	ldi	r27, 0x00	; 0
+ 130:	e5 e5       	ldi	r30, 0x55	; 85
+ 132:	f0 e0       	ldi	r31, 0x00	; 0
+ 134:	80 81       	ld	r24, Z
+ 136:	81 60       	ori	r24, 0x01	; 1
+ 138:	8c 93       	st	X, r24
+
+	SET_BIT(STATUS_REG,7);
+ 13a:	af e5       	ldi	r26, 0x5F	; 95
+ 13c:	b0 e0       	ldi	r27, 0x00	; 0
+ 13e:	ef e5       	ldi	r30, 0x5F	; 95
+ 140:	f0 e0       	ldi	r31, 0x00	; 0
+ 142:	80 81       	ld	r24, Z
+ 144:	80 68       	ori	r24, 0x80	; 128
+ 146:	8c 93       	st	X, r24
+
+
+}
+ 148:	cf 91       	pop	r28
+ 14a:	df 91       	pop	r29
+ 14c:	08 95       	ret
+
+0000014e <_exit>:
+ 14e:	f8 94       	cli
+
+00000150 <__stop_program>:
+ 150:	ff cf       	rjmp	.-2      	; 0x150 <__stop_program>
